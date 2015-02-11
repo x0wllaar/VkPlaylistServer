@@ -29,8 +29,12 @@ namespace VkPlaylistServer
             this.listening = true;
             listener.Start();
             while (listening) {
-                var reqcontext = await listener.GetContextAsync();
-                Task.Factory.StartNew(() => SendPlaylist(reqcontext));
+                try
+                {
+                    var reqcontext = await listener.GetContextAsync();
+                    Task.Factory.StartNew(() => SendPlaylist(reqcontext));
+                }
+                catch { }
             }
         }
 

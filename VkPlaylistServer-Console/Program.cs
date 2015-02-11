@@ -11,8 +11,8 @@ namespace VkPlaylistServer_Console
         static void Main(string[] args)
         {
             if (args.Length < 3) {
-                ShowUsage();
-                return;
+               ShowUsage();
+               return;
             }
 
             int port;
@@ -34,6 +34,7 @@ namespace VkPlaylistServer_Console
             Console.WriteLine("Usage:");
             Console.WriteLine(name + " E-mail Password Port");
             Console.WriteLine("Example " + name + "vpupkin@mail.ru qwerty123 8080");
+            Console.ReadKey();
         }
     }
 }
