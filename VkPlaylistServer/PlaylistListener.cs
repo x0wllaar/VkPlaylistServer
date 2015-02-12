@@ -42,45 +42,45 @@ namespace VkPlaylistServer
             var url = ReqContext.Request.RawUrl;
             url = System.Web.HttpUtility.UrlDecode(url);
             url = url.TrimStart('/');
-            Console.WriteLine(url);
             string[] reqParams = url.Split('/');
+            
             int count = 0;
+            int reqcount = 30;
+            int beginOffset = 0;
             string RespString = "";
+            
             if (reqParams.Length == 1) { 
-                Console.WriteLine("Requesting some - " + reqParams[0]);
                 RespString = plreq.GetAudioPlaylist(reqParams[0], out count);
             }
             else if (reqParams.Length == 2)
             {
-                int reqcount = 0;
                 if (!int.TryParse(reqParams[1], out reqcount))
                 {
                     Console.WriteLine("Pasing quantity failed, using 30 as default");
-                    reqcount = 30;
                 }
-                Console.WriteLine("Requesting " + reqcount.ToString() + " - " + reqParams[0]);
-                RespString = plreq.GetAudioPlaylist(reqParams[0], out count, reqcount);
             }
             else if (reqParams.Length == 3) {
-                int reqcount = 0;
                 if (!int.TryParse(reqParams[1], out reqcount))
                 {
                     Console.WriteLine("Pasing quantity failed, using 30 as default");
-                    reqcount = 30;
                 }
-                int beginOffset = 0;
                 if (!int.TryParse(reqParams[2], out beginOffset))
                 {
                     Console.WriteLine("Pasing offset failed, using 0 as default");
                 }
-                Console.WriteLine("Requesting " + reqcount.ToString() + " - " + reqParams[0] + " beginnig from #" + beginOffset);
-                RespString = plreq.GetAudioPlaylist(reqParams[0], out count, reqcount, beginOffset);
             }
             else
             {
                 Console.WriteLine("Parsing the request failed");
+                SendString(ReqContext, "");
+                return;
             }
+            
+            Console.WriteLine("Requesting " + reqcount.ToString() + " - " + reqParams[0] + " beginnig from #" + beginOffset);
+            RespString = plreq.GetAudioPlaylist(reqParams[0], out count, reqcount, beginOffset);
+            
             Console.WriteLine("Got " + count.ToString());
+            Console.WriteLine("");
             SendString(ReqContext, RespString);
         }
 
@@ -88,6 +88,7 @@ namespace VkPlaylistServer
             byte[] ResponseBuffer = System.Text.Encoding.UTF8.GetBytes(ResponseString);
             Context.Response.ContentType = "audio/x-mpegurl";
             Context.Response.ContentLength64 = ResponseBuffer.Length;
+            
             var OutStream = Context.Response.OutputStream;
             OutStream.Write(ResponseBuffer, 0, ResponseBuffer.Length);
             OutStream.Close();
