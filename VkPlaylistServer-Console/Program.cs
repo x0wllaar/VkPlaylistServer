@@ -33,7 +33,7 @@ namespace VkPlaylistServer_Console
             var name = "VkPlaylistServer";
             Console.WriteLine("Usage:");
             Console.WriteLine(name + " E-mail Password Port");
-            Console.WriteLine("Example " + name + "vpupkin@mail.ru qwerty123 8080");
+            Console.WriteLine("Example " + name + " vpupkin@mail.ru qwerty123 8080");
             Console.ReadKey();
         }
     }
