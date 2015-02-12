@@ -37,6 +37,7 @@ namespace VkPlaylistServer_Console
             serv.Listen();
 
             Console.WriteLine("Press r to restart listening, q to quit");
+            Console.WriteLine("");
 
             ConsoleKeyInfo key;
             while (true) {
