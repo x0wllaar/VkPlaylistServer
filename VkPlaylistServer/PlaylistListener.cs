@@ -49,34 +49,28 @@ namespace VkPlaylistServer
             int beginOffset = 0;
             string RespString = "";
             
-            if (reqParams.Length == 1) { 
+            try { 
                 RespString = plreq.GetAudioPlaylist(reqParams[0], out count);
-            }
-            else if (reqParams.Length == 2)
-            {
-                if (!int.TryParse(reqParams[1], out reqcount))
-                {
-                    Console.WriteLine("Pasing quantity failed, using 30 as default");
-                }
-            }
-            else if (reqParams.Length == 3) {
-                if (!int.TryParse(reqParams[1], out reqcount))
-                {
-                    Console.WriteLine("Pasing quantity failed, using 30 as default");
-                }
-                if (!int.TryParse(reqParams[2], out beginOffset))
-                {
-                    Console.WriteLine("Pasing offset failed, using 0 as default");
-                }
-            }
-            else
-            {
+            }catch{
                 Console.WriteLine("Parsing the request failed");
                 SendString(ReqContext, "");
-                return;
+                return;   
             }
             
-            Console.WriteLine("Requesting " + reqcount.ToString() + " - " + reqParams[0] + " beginnig from #" + beginOffset);
+            try {
+                reqcount = int.Parse(reqParams[1]);
+            }catch{
+                Console.WriteLine("Pasing quantity failed, using 30 as default");
+            }
+
+            try {
+                beginOffset = int.Parse(reqParams[2]);
+            }
+            catch {
+                Console.WriteLine("Pasing offset failed, using 0 as default");    
+            }
+
+            Console.WriteLine("Requesting " + reqcount.ToString() + " - " + reqParams[0] + " beginning from #" + beginOffset);
             RespString = plreq.GetAudioPlaylist(reqParams[0], out count, reqcount, beginOffset);
             
             Console.WriteLine("Got " + count.ToString());
